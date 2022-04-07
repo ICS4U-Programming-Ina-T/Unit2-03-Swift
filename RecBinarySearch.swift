@@ -20,11 +20,11 @@ func binarySearch(userArray: [Int], userNumber: Int, lowIndex: Int, highIndex: I
         return -1
     }
 
+    // checks the index of where the user's number is
     if userArray[mid] == userNumber {
         return mid
     } else if userNumber < userArray[mid] {
-
-        return binarySearch(userArray:userArray, userNumber: userNumber, lowIndex: lowIndex, highIndex: mid - 1)
+        return binarySearch(userArray: userArray, userNumber: userNumber, lowIndex: lowIndex, highIndex: mid - 1)
     } else {
         return binarySearch(userArray: userArray, userNumber: userNumber, lowIndex: mid + 1, highIndex: highIndex)
     }
@@ -37,7 +37,7 @@ enum MyError: Error {
 
 // function that throws exception
 func catchString() throws {
-    throw MyError.runtimeError("This is not an integer!")
+    throw MyError.runtimeError("ERROR: Invalid Input")
 }
 
 // declaring constants
@@ -46,7 +46,7 @@ let minNum = 0
 let arraySize = 250
 
 // declaring variables
-var randomNumberArray: [Int] = [Int] (repeating: 0, count: arraySize)
+var randomNumberArray: [Int] = [Int](repeating: 0, count: arraySize)
 var numberArray: [Int]
 var searchNumber: Int
 var searchResult: Int
@@ -70,11 +70,13 @@ do {
     print("Sorted list of numbers:")
     print()
 
+    // adds extra zero(s) to beginning of non 3 digit numbers
     for element in numberArray {
         padded = String(format: "%03d", element)
         print("\(padded), ", terminator: "")
     }
 
+    print()
     print()
 
     // getting input from the user
@@ -88,12 +90,20 @@ do {
         try catchString()
     }
 
+    // // ensuring the user inputs an appropriate integer
     if searchNumber > maxNum || searchNumber < minNum {
         try catchString()
     } else {
-        searchResult = binarySearch(userArray: numberArray, userNumber: searchNumber, lowIndex: 0, highIndex: numberArray.count - 1)
-        print()
-        print("Your number is in index: \(searchResult)")
+        searchResult =
+            binarySearch(userArray: numberArray,
+                userNumber: searchNumber, lowIndex: 0, highIndex: numberArray.count - 1)
+
+        // outputting the results of the search
+        if searchResult == -1 {
+            print("Value does not exist in the array.")
+        } else {
+            print("Your number is in index: \(searchResult)")
+        }
     }
 } catch MyError.runtimeError(let errorMessage) {
     print(errorMessage)
