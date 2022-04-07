@@ -14,7 +14,7 @@ import Foundation
 
 func binarySearch(userArray: [Int], userNumber: Int, lowIndex: Int, highIndex: Int) -> Int {
     // declaring variables
-    var mid: Int = lowIndex + ((highIndex - lowIndex) / 2)
+    let mid: Int = lowIndex + ((highIndex - lowIndex) / 2)
 
     if lowIndex > highIndex {
         return -1
@@ -23,9 +23,10 @@ func binarySearch(userArray: [Int], userNumber: Int, lowIndex: Int, highIndex: I
     if userArray[mid] == userNumber {
         return mid
     } else if userNumber < userArray[mid] {
-        return binarySearch(userArray, userNumber, mid + 1, highIndex)
+
+        return binarySearch(userArray:userArray, userNumber: userNumber, lowIndex: lowIndex, highIndex: mid - 1)
     } else {
-        return binarySearch(userArray: userNumber, low, mid - 1)
+        return binarySearch(userArray: userArray, userNumber: userNumber, lowIndex: mid + 1, highIndex: highIndex)
     }
 }
 
@@ -39,16 +40,13 @@ func catchString() throws {
     throw MyError.runtimeError("This is not an integer!")
 }
 
-// main part of program
-
 // declaring constants
 let maxNum = 999
 let minNum = 0
 let arraySize = 250
 
 // declaring variables
-// var ranNum: Int = Int.random(in: minNum..<maxNum + minNum)
-var randomNumberArray: [Int] = Array(count: arraySize)
+var randomNumberArray: [Int] = [Int] (repeating: 0, count: arraySize)
 var numberArray: [Int]
 var searchNumber: Int
 var searchResult: Int
@@ -73,15 +71,14 @@ do {
     print()
 
     for element in numberArray {
-        // https://reactgo.com/swift-convert-int-string-leading-zeros/#:~:text=swift1min%20read,initializer.&text=Here%20is%20an%20example%2C%20that%20adds%20leading%200%20to%20the%201%20.&text=If%20you%20want%20to%20add,can%20do%20it%20like%20this.
-        padded = String(format: "%02d", 1)
-        print("\(padded) , ")
+        padded = String(format: "%03d", element)
+        print("\(padded), ", terminator: "")
     }
 
     print()
 
     // getting input from the user
-    print("What number are you searching for in the array (integer between 0 and 999):", terminator: "")
+    print("What number are you searching for in the array (integer between 0 and 999): ", terminator: "")
     userNumString = readLine()!
     print()
 
@@ -94,7 +91,7 @@ do {
     if searchNumber > maxNum || searchNumber < minNum {
         try catchString()
     } else {
-        searchResult = binarySearch(userArray: numberArray, userNumber: searchNumber, lowIndex: 0, highIndex: numberArray.length - 1)
+        searchResult = binarySearch(userArray: numberArray, userNumber: searchNumber, lowIndex: 0, highIndex: numberArray.count - 1)
         print()
         print("Your number is in index: \(searchResult)")
     }
